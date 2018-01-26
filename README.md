@@ -1,6 +1,13 @@
-# lizard plugin
+<p align="center">
+    <a href="https://sentry.io" target="_blank" align="center">
+        <img src="https://camo.githubusercontent.com/bf0171b40f72483bc67dd4352db1d37c90a541c1/687474703a2f2f7777772e6c697a6172642e77732f776562736974652f7374617469632f696d672f6c6f676f2d736d616c6c2e706e67">
+    </a>
+<br/>
+    <h1>Lizard Fastlane Plugin</h1>
+</p>
 
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-lizard)
+[![Gem Version](https://badge.fury.io/rb/fastlane-plugin-lizard.svg)](https://badge.fury.io/rb/fastlane-plugin-lizard)
 
 ## Getting Started
 
@@ -12,27 +19,21 @@ fastlane add_plugin lizard
 
 ## About lizard
 
-it uses lizard to calculate code complexity
+Lizard is an extensible Cyclomatic Complexity Analyzer for many imperative programming languages including C/C++ (doesn't require all the header files or Java imports).
 
-**Note to author:** Add a more detailed description about this plugin here. If your plugin contains multiple actions, make sure to mention them here.
+For more information check out the [Github repository](https://github.com/terryyin/lizard)
 
-## Example
+## Lizard Actions
 
-Check out the [example `Fastfile`](fastlane/Fastfile) to see how to use this plugin. Try it by cloning the repo, running `fastlane install_plugins` and `bundle exec fastlane test`.
-
-**Note to author:** Please set up a sample project to make it easy for users to explore what your plugin does. Provide everything that is necessary to try out the plugin in this project (including a sample Xcode/Android project if necessary)
-
-## Run tests for this plugin
-
-To run both the tests, and code style validation, run
+Lizard has only one action so far
 
 ```
-rake
-```
-
-To automatically fix many of the styling issues, use
-```
-rubocop -a
+lizard(
+  source_folder: "foo",
+  language: "swift",
+  export_type: "csv",
+  report_file: "bar.csv"
+)
 ```
 
 ## Issues and Feedback
