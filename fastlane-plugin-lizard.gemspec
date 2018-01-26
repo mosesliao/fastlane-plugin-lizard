@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email         = 'moses.liao.sd@gmail.com'
 
   spec.summary       = 'it uses lizard to calculate code complexity'
-  # spec.homepage      = "https://github.com/<GITHUB_USERNAME>/fastlane-plugin-lizard"
+  spec.homepage      = "https://github.com/liaogz82/fastlane-plugin-lizard"
   spec.license       = "MIT"
 
   spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)
