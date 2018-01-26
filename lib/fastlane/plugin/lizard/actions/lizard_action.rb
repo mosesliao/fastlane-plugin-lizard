@@ -2,7 +2,6 @@ module Fastlane
   module Actions
     class LizardAction < Action
       def self.run(params)
-        puts params[:source_folder]
         command = ["lizard #{params[:source_folder]}"]
         command << "-l #{params[:language]}" if params[:language]
         command << "--#{params[:export_type]}" if params[:export_type]
@@ -19,13 +18,12 @@ module Fastlane
 
         if params[:show_warnings]
           Fastlane::Actions.sh_control_output("lizard #{params[:source_folder]} | sed -n -e '/^$/,$p'", print_command: true, print_command_output: true)
-        else
-          Fastlane::Actions.sh_control_output(command.join(" "), print_command: false, print_command_output: false)
         end
+        Fastlane::Actions.sh_control_output(command.join(" "), print_command: false, print_command_output: false)
       end
 
       def self.description
-        "Lizard is an extensible Cyclomatic Complexity Analyzer for many imperative programming languages including C/C++ "
+        "Lizard is an extensible Cyclomatic Complexity Analyzer for many imperative programming languages including C/C++"
       end
 
       def self.authors
@@ -69,7 +67,7 @@ module Fastlane
                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :exclude,
                                       env_name: "FL_LIZARD_EXCLUDE",
-                                      description: "Exclude files that match this pattern. * matches everything, ? matches any single character, \"./folder/*\" exclude everything in the folder recursively. Multiple patterns can be specified. Don't forget to add "" around the pattern",
+                                      description: "Exclude files that match this pattern. * matches everything, ? matches any single character, \"./folder/*\" exclude everything in the folder recursively. Multiple patterns can be specified. Don't forget to add \"\" around the pattern",
                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :working_threads,
                                        env_name: "FL_LIZARD_WORKING_THREADS",
@@ -93,7 +91,8 @@ module Fastlane
                                        description: "The folder/file which lizard output to"),
           FastlaneCore::ConfigItem.new(key: :show_warnings,
                                       env_name: "FL_LIZARD_SHOW_WARNINGS",
-                                      description: "Show lizard warnings on console",
+                                      description: "Show lizard warnings on console, on code that is too complex",
+                                      is_string: false,
                                       default_value: false)
         ]
       end
