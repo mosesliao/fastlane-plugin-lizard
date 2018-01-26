@@ -2,7 +2,6 @@ module Fastlane
   module Actions
     class LizardAction < Action
       def self.run(params)
-        puts params[:source_folder]
         command = ["lizard #{params[:source_folder]}"]
         command << "-l #{params[:language]}" if params[:language]
         command << "--#{params[:export_type]}" if params[:export_type]
@@ -18,7 +17,7 @@ module Fastlane
         command << "> ./#{params[:report_file]}"
 
         if params[:show_warnings]
-          Fastlane::Actions.sh_control_output("lizard #{params[:source_folder]} | sed -n -e '/^$/,$p'", print_command: true, print_command_output: true)
+          Fastlane::Actions.sh_control_output(command.join(" ") + " | sed -n -e '/^$/,$p'", print_command: true, print_command_output: true)
         else
           Fastlane::Actions.sh_control_output(command.join(" "), print_command: false, print_command_output: false)
         end
@@ -69,7 +68,7 @@ module Fastlane
                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :exclude,
                                       env_name: "FL_LIZARD_EXCLUDE",
-                                      description: "Exclude files that match this pattern. * matches everything, ? matches any single character, \"./folder/*\" exclude everything in the folder recursively. Multiple patterns can be specified. Don't forget to add "" around the pattern",
+                                      description: "Exclude files that match this pattern. * matches everything, ? matches any single character, \"./folder/*\" exclude everything in the folder recursively. Multiple patterns can be specified. Don't forget to add \"\" around the pattern",
                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :working_threads,
                                        env_name: "FL_LIZARD_WORKING_THREADS",
@@ -94,6 +93,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :show_warnings,
                                       env_name: "FL_LIZARD_SHOW_WARNINGS",
                                       description: "Show lizard warnings on console",
+                                      is_string: false,
                                       default_value: false)
         ]
       end
