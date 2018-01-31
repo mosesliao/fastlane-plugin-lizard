@@ -1,5 +1,3 @@
-# coding: utf-8
-
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'fastlane/plugin/lizard/version'
@@ -28,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'rspec_junit_formatter'
   spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'rubocop', '0.49.1'
+  spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'simplecov'
-  spec.add_development_dependency 'fastlane', '>= 2.64.1'
+  spec.add_development_dependency 'fastlane'
 end
