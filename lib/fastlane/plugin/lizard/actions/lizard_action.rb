@@ -19,7 +19,12 @@ module Fastlane
         if params[:show_warnings]
           Fastlane::Actions.sh_control_output("lizard #{params[:source_folder]} | sed -n -e '/^$/,$p'", print_command: true, print_command_output: true)
         end
-        Fastlane::Actions.sh_control_output(command.join(" "), print_command: false, print_command_output: false)
+        if File.directory?(params[:report_file])
+          Fastlane::Actions.sh_control_output(command.join(" "), print_command: false, print_command_output: false)
+        else
+          # throws user_error
+          UI.user_error!("Please ensure #{params[:report_file]} is writable")
+        end
       end
 
       def self.description
