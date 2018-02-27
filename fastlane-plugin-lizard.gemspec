@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.author        = 'Moses Liao'
   spec.email         = 'moses.liao.sd@gmail.com'
 
-  spec.summary       = 'it uses lizard to calculate code complexity'
+  spec.summary       = 'Run swift code validation using SwiftLint'
   spec.homepage      = "https://github.com/liaogz82/fastlane-plugin-lizard"
   spec.license       = "MIT"
 
@@ -21,12 +21,12 @@ Gem::Specification.new do |spec|
 
   # spec.add_dependency 'your-dependency', '~> 1.0.0'
 
-  spec.add_development_dependency 'bundler'
-  spec.add_development_dependency 'fastlane'
-  spec.add_development_dependency 'pry'
-  spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'rspec_junit_formatter'
-  spec.add_development_dependency 'rubocop'
-  spec.add_development_dependency 'simplecov'
+  spec.add_dependency 'bundler'
+  spec.add_dependency 'fastlane'
+  spec.add_dependency 'pry'
+  spec.add_dependency 'rake'
+  spec.add_dependency 'rspec'
+  spec.add_dependency 'rspec_junit_formatter'
+  spec.add_dependency 'rubocop'
+  spec.add_dependency 'simplecov'
 end

@@ -2,7 +2,29 @@ module Fastlane
   module Actions
     class LizardAction < Action
       def self.run(params)
-        command = ["lizard #{params[:source_folder]}"]
+        if `which lizard`.to_s.empty?
+          UI.user_error!("You have to install lizard using `[sudo] pip install lizard` or specify the executable path with the `:executable` option.")
+        end
+
+        command = forming_command(params)
+
+        if params[:show_warnings]
+          Fastlane::Actions.sh_control_output("lizard #{params[:source_folder]} | sed -n -e '/^$/,$p'", print_command: true, print_command_output: true)
+        end
+
+        begin
+          Actions.sh(command.join(" "), log: false)
+        rescue StandardError => e
+          puts e
+          handle_lizard_error(params[:ignore_exit_status], $CHILD_STATUS.exitstatus)
+        end
+      end
+
+      def self.forming_command(params)
+        command = []
+        command << 'lizard' unless params[:executable]
+        command << "python #{params[:executable]}" if params[:executable]
+        command << params[:source_folder].to_s if params[:source_folder]
         command << "-l #{params[:language]}" if params[:language]
         command << "--#{params[:export_type]}" if params[:export_type]
         command << "-C #{params[:ccn]}" if params[:ccn] # stands for cyclomatic complexity number
@@ -14,21 +36,33 @@ module Fastlane
         command << "-E #{params[:extensions]}" if params[:extensions]
         command << "-s #{params[:sorting]}" if params[:sorting]
         command << "-W #{params[:whitelist]}" if params[:whitelist]
-        command << "> ./#{params[:report_file]}"
+        command << "> #{params[:report_file].shellescape}" if params[:report_file]
 
-        if params[:show_warnings]
-          Fastlane::Actions.sh_control_output("lizard #{params[:source_folder]} | sed -n -e '/^$/,$p'", print_command: true, print_command_output: true)
-        end
-        if File.directory?(params[:report_file])
-          Fastlane::Actions.sh_control_output(command.join(" "), print_command: false, print_command_output: false)
-        else
-          # throws user_error
-          UI.user_error!("Please ensure #{params[:report_file]} is writable")
-        end
+        return command
       end
 
+      def self.handle_lizard_error(ignore_exit_status, exit_status)
+        if ignore_exit_status
+          failure_suffix = 'which would normally fail the build.'
+          secondary_message = 'fastlane will continue because the `ignore_exit_status` option was used! 🙈'
+        else
+          failure_suffix = 'which represents a failure.'
+          secondary_message = 'If you want fastlane to continue anyway, use the `ignore_exit_status` option. 🙈'
+        end
+
+        UI.important("")
+        UI.important("Lizard finished with exit code #{exit_status}, #{failure_suffix}")
+        UI.important(secondary_message)
+        UI.important("")
+        UI.user_error!("Lizard finished with errors (exit code: #{exit_status})") unless ignore_exit_status
+      end
+
+      #####################################################
+      # @!group Documentation
+      #####################################################
+
       def self.description
-        "Lizard is an extensible Cyclomatic Complexity Analyzer for many imperative programming languages including C/C++"
+        "Run lizard code cyclomatic complexity analysis."
       end
 
       def self.authors
@@ -44,31 +78,34 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :source_folder,
                                        env_name: "FL_LIZARD_SOURCE_FOLDER",
                                        description: "The folders that contains the source code for lizard to scan",
-                                       verify_block: proc do |value|
-                                         UI.user_error!("No source folder specified") unless value and !value.empty?
-                                       end),
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :language,
                                        env_name: "FL_LIZARD_LANGUAGE",
                                        description: "List the programming languages you want to analyze",
-                                       default_value: "swift"),
+                                       default_value: "swift",
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :export_type,
-                                      env_name: "FL_LIZARD_EXPORT_TYPE",
-                                      description: "The file extension of your export. E.g. xml, csv"),
+                                       env_name: "FL_LIZARD_EXPORT_TYPE",
+                                       description: "The file extension of your export. E.g. xml, csv",
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :ccn,
                                        env_name: "FL_LIZARD_CCN",
                                        description: "Threshold of cyclomatic complexity number warning",
+                                       is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :length,
-                                      env_name: "FL_LIZARD_LENGTH",
-                                      description: "Threshold for maximum function length warning",
-                                      optional: true),
+                                       env_name: "FL_LIZARD_LENGTH",
+                                       description: "Threshold for maximum function length warning",
+                                       is_string: false,
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :arguments,
-                                      env_name: "FL_LIZARD_ARGUMENTS",
-                                      description: "Limit for number of parameters",
-                                      optional: true),
+                                       env_name: "FL_LIZARD_ARGUMENTS",
+                                       description: "Limit for number of parameters",
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :number,
                                       env_name: "FL_LIZARD_NUMBER",
                                       description: "If the number of warnings is equal or less than the number, the tool will exit normally, otherwise it will generate error. Useful in makefile for legacy code",
+                                      is_string: false,
                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :exclude,
                                       env_name: "FL_LIZARD_EXCLUDE",
@@ -82,6 +119,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :extensions,
                                       env_name: "FL_LIZARD_EXTENSIONS",
                                       description: "User the extensions. The available extensions are: -Ecpre: it will ignore code in the #else branch. -Ewordcount: count word frequencies and generate tag cloud. -Eoutside: include the global code as one function",
+                                      is_string: true,
                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :sorting,
                                       env_name: "FL_LIZARD_SORTING",
@@ -93,17 +131,27 @@ module Fastlane
                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :report_file,
                                        env_name: "FL_LIZARD_REPORT_FILE",
-                                       description: "The folder/file which lizard output to"),
+                                       description: "The folder/file which lizard output to",
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :ignore_exit_status,
+                                      description: "Ignore the exit status of the lizard command, so that serious violations don't fail the build (true/false)",
+                                      default_value: false,
+                                      is_string: false,
+                                      optional: true),
           FastlaneCore::ConfigItem.new(key: :show_warnings,
                                       env_name: "FL_LIZARD_SHOW_WARNINGS",
                                       description: "Show lizard warnings on console, on code that is too complex",
                                       is_string: false,
-                                      default_value: false)
+                                      default_value: false),
+          FastlaneCore::ConfigItem.new(key: :executable,
+                                      description: "Path to the `swiftlint` executable on your machine",
+                                      is_string: true,
+                                      optional: true)
         ]
       end
 
       def self.is_supported?(platform)
-        true
+        [:ios, :android, :mac].include?(platform)
       end
     end
   end

@@ -1,0 +1,3 @@
+[submodule "lizard"]
+	path = lizard
+	url = git@github.com:terryyin/lizard.git
