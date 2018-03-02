@@ -10,3 +10,7 @@ fastlane/README.md
 fastlane/report.xml
 coverage
 test-results
+/spec/swiftlint_spec_example.rb
+/lib/fastlane/plugin/lizard/actions/swiftlint_example.rb
+
+/lizard/*
