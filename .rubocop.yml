@@ -261,3 +261,7 @@ Style/IfInsideElse:
 # Sometimes we just want to 'collect'
 Style/CollectionMethods:
   Enabled: false
+
+# Allows File for Style/RescueStandardError
+Style/ExpandPathArguments:
+  Enabled: false

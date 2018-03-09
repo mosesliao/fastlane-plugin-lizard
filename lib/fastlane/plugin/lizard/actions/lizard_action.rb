@@ -144,7 +144,7 @@ module Fastlane
                                       is_string: false,
                                       default_value: false),
           FastlaneCore::ConfigItem.new(key: :executable,
-                                      description: "Path to the `swiftlint` executable on your machine",
+                                      description: "Path to the `lizard.py` executable on your machine",
                                       is_string: true,
                                       optional: true)
         ]

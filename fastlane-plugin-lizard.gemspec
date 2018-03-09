@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.author        = 'Moses Liao'
   spec.email         = 'moses.liao.sd@gmail.com'
 
-  spec.summary       = 'Run swift code validation using SwiftLint'
+  spec.summary       = 'Run swift code complexity analytics using Lizard'
   spec.homepage      = "https://github.com/liaogz82/fastlane-plugin-lizard"
   spec.license       = "MIT"
 
