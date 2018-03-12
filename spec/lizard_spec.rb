@@ -27,18 +27,6 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "when specify a folder to scan" do
-      it "scans the specified folder" do
-        result = Fastlane::FastFile.new.parse("lane :test do
-          lizard(
-            export_type: 'xml'
-          )
-        end").runner.execute(:test)
-
-        expect(result).to eq("lizard -l swift --xml")
-      end
-    end
-
     context "when specify export_type as XML" do
       it "prints out XML as stdout" do
         result = Fastlane::FastFile.new.parse("lane :test do
