@@ -3,6 +3,8 @@ describe Fastlane::Actions::LizardAction do
     let(:output_file) { "lizard.result.json" }
     let(:folder) { "assets" }
     let(:language) { "java" }
+    let(:multiple_languages) { "  java, swift,objectivec" }
+    let(:expected_multiple_language_options) { "-l java -l swift -l objectivec" }
     let(:ccn) { 10 }
     let(:length) { 800 }
     let(:working_threads) { 3 }
@@ -72,6 +74,18 @@ describe Fastlane::Actions::LizardAction do
         end").runner.execute(:test)
 
         expect(result).to eq("lizard -l #{language}")
+      end
+    end
+
+    context "when specify multiple languages to scan" do
+      it "states all specified languages" do
+        result = Fastlane::FastFile.new.parse("lane :test do
+          lizard(
+            language: '#{multiple_languages}'
+          )
+        end").runner.execute(:test)
+
+        expect(result).to eq("lizard #{expected_multiple_language_options}")
       end
     end
 
