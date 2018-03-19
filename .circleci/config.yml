@@ -41,3 +41,10 @@ jobs:
       - store_artifacts:
           path: ~/repo/test-results
           destination: test-results
+
+    deployment:
+      production:
+        branch: master
+        commands:
+          - rake install
+          - rake release

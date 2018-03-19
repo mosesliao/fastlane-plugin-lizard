@@ -1,5 +1,5 @@
-<p align="center">
-    <a href="https://sentry.io" target="_blank" align="center">
+<p align="left">
+    <a href="https://sentry.io" target="_blank" align="left">
         <img src="https://camo.githubusercontent.com/bf0171b40f72483bc67dd4352db1d37c90a541c1/687474703a2f2f7777772e6c697a6172642e77732f776562736974652f7374617469632f696d672f6c6f676f2d736d616c6c2e706e67">
     </a>
 <br/>
@@ -9,6 +9,7 @@
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-lizard)
 [![Gem Version](https://badge.fury.io/rb/fastlane-plugin-lizard.svg)](https://badge.fury.io/rb/fastlane-plugin-lizard)
 [![CircleCI](https://circleci.com/gh/liaogz82/fastlane-plugin-lizard.svg?style=svg&circle-token=6d2bc552098ad6c8955ddecc9b058827e91e25cf)](https://circleci.com/gh/liaogz82/fastlane-plugin-lizard)
+![](./coverage/coverage.svg)
 
 ## Getting Started
 
@@ -28,7 +29,7 @@ For more information check out the [Github repository](https://github.com/terryy
 
 Lizard has only one action so far
 
-```
+```ruby
 lizard(
   source_folder: "foo",
   language: "swift",
