@@ -25,7 +25,7 @@ module Fastlane
         command << 'lizard' unless params[:executable]
         command << "python #{params[:executable]}" if params[:executable]
         command << params[:source_folder].to_s if params[:source_folder]
-        command << "-l #{params[:language]}" if params[:language]
+        command << params[:language].split(",").map { |l| "-l #{l.strip}" }.join(" ") if params[:language]
         command << "--#{params[:export_type]}" if params[:export_type]
         command << "-C #{params[:ccn]}" if params[:ccn] # stands for cyclomatic complexity number
         command << "-L #{params[:length]}" if params[:length]
@@ -81,7 +81,7 @@ module Fastlane
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :language,
                                        env_name: "FL_LIZARD_LANGUAGE",
-                                       description: "List the programming languages you want to analyze",
+                                       description: "List the programming languages you want to analyze, e.g. 'swift,objectivec'",
                                        default_value: "swift",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :export_type,
