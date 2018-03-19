@@ -65,6 +65,19 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
+    # For lizard version 1.14.0
+    context "when specify export_type as HTML" do
+      it "prints out CSV as stdout" do
+        result = Fastlane::FastFile.new.parse("lane :test do
+          lizard(
+            export_type: 'html'
+          )
+        end").runner.execute(:test)
+
+        expect(result).to eq("lizard -l swift --html")
+      end
+    end
+
     context "when specify folder to scan" do
       it "states the source folder" do
         result = Fastlane::FastFile.new.parse("lane :test do

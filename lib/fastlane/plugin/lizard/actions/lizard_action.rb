@@ -10,11 +10,13 @@ module Fastlane
           UI.user_error!("The custom executable at '#{params[:executable]}' does not exist.")
         end
 
-        command = forming_command(params)
-
-        if params[:show_warnings]
-          Fastlane::Actions.sh_control_output("lizard #{params[:source_folder]} | sed -n -e '/^$/,$p'", print_command: true, print_command_output: true)
+        lizard_cli_version = Gem::Version.new(`lizard --version`.scan(/(?:\d+\.?){3}/).first)
+        required_version = Gem::Version.new(Fastlane::Lizard::CLI_VERSION)
+        if lizard_cli_version < required_version
+          UI.user_error!("Your lizard is outdated, please upgrade to at least version #{Fastlane::Lizard::CLI_VERSION} and start your lane again!")
         end
+
+        command = forming_command(params)
 
         begin
           Actions.sh(command.join(" "), log: false)
@@ -90,7 +92,7 @@ module Fastlane
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :export_type,
                                        env_name: "FL_LIZARD_EXPORT_TYPE",
-                                       description: "The file extension of your export. E.g. xml, csv",
+                                       description: "The file extension of your export. E.g. xml, csv, html",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :ccn,
                                        env_name: "FL_LIZARD_CCN",
@@ -142,11 +144,6 @@ module Fastlane
                                       default_value: false,
                                       is_string: false,
                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :show_warnings,
-                                      env_name: "FL_LIZARD_SHOW_WARNINGS",
-                                      description: "Show lizard warnings on console, on code that is too complex",
-                                      is_string: false,
-                                      default_value: false),
           FastlaneCore::ConfigItem.new(key: :executable,
                                       description: "Path to the `lizard.py` executable on your machine",
                                       is_string: true,
