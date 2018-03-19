@@ -2,8 +2,12 @@ module Fastlane
   module Actions
     class LizardAction < Action
       def self.run(params)
-        if `which lizard`.to_s.empty?
+        if params[:executable].nil? && `which lizard`.to_s.empty?
           UI.user_error!("You have to install lizard using `[sudo] pip install lizard` or specify the executable path with the `:executable` option.")
+        end
+
+        if params[:executable] && !File.exist?(params[:executable])
+          UI.user_error!("The custom executable at '#{params[:executable]}' does not exist.")
         end
 
         command = forming_command(params)
@@ -24,7 +28,6 @@ module Fastlane
         command = []
         command << 'lizard' unless params[:executable]
         command << "python #{params[:executable]}" if params[:executable]
-        command << params[:source_folder].to_s if params[:source_folder]
         command << params[:language].split(",").map { |l| "-l #{l.strip}" }.join(" ") if params[:language]
         command << "--#{params[:export_type]}" if params[:export_type]
         command << "-C #{params[:ccn]}" if params[:ccn] # stands for cyclomatic complexity number
@@ -36,6 +39,7 @@ module Fastlane
         command << "-E #{params[:extensions]}" if params[:extensions]
         command << "-s #{params[:sorting]}" if params[:sorting]
         command << "-W #{params[:whitelist]}" if params[:whitelist]
+        command << params[:source_folder].to_s if params[:source_folder]
         command << "> #{params[:report_file].shellescape}" if params[:report_file]
 
         return command

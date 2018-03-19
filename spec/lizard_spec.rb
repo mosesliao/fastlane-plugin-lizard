@@ -17,15 +17,27 @@ describe Fastlane::Actions::LizardAction do
 
         expect(result).to eq("lizard -l swift")
       end
+    end
 
-      it 'custom executable default as swift' do
+    context "when specify custom executable" do
+      it "uses custom executable" do
         result = Fastlane::FastFile.new.parse("lane :test do
           lizard(
-            executable: 'lizard/lizard.py'
+            executable: '../spec/fixtures/lizard.py'
           )
         end").runner.execute(:test)
 
-        expect(result).to eq("python lizard/lizard.py -l swift")
+        expect(result).to eq("python ../spec/fixtures/lizard.py -l swift")
+      end
+
+      it "should raise if custom executable does not exist" do
+        expect do
+          Fastlane::FastFile.new.parse("lane :test do
+            lizard(
+              executable: 'no/such/file/lizard.py'
+            )
+          end").runner.execute(:test)
+        end.to raise_error("The custom executable at 'no/such/file/lizard.py' does not exist.")
       end
     end
 
@@ -61,7 +73,7 @@ describe Fastlane::Actions::LizardAction do
           )
         end").runner.execute(:test)
 
-        expect(result).to eq("lizard #{folder} -l swift")
+        expect(result).to eq("lizard -l swift #{folder}")
       end
     end
 
