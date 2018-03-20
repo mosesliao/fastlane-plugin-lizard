@@ -9,6 +9,7 @@
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-lizard)
 [![Gem Version](https://badge.fury.io/rb/fastlane-plugin-lizard.svg)](https://badge.fury.io/rb/fastlane-plugin-lizard)
 [![CircleCI](https://circleci.com/gh/liaogz82/fastlane-plugin-lizard.svg?style=svg&circle-token=6d2bc552098ad6c8955ddecc9b058827e91e25cf)](https://circleci.com/gh/liaogz82/fastlane-plugin-lizard)
+[![codecov](https://codecov.io/gh/liaogz82/fastlane-plugin-lizard/branch/master/graph/badge.svg)](https://codecov.io/gh/liaogz82/fastlane-plugin-lizard)
 
 ## Getting Started
 
