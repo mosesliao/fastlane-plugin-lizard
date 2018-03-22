@@ -13,7 +13,7 @@ RuboCop::RakeTask.new(:rubocop)
 task default: [:spec, :rubocop]
 
 task :circleci_release do
-  @nearest_reachable_tag = `git describe --abbrev=0 --tags 2>/dev/null`.strip.slice!(0)
+  @nearest_reachable_tag = `git describe --abbrev=0 --tags 2>/dev/null`.strip[1..-1]
 
   if Gem::Version.new(Fastlane::Lizard::VERSION) > Gem::Version.new(@nearest_reachable_tag)
     puts "Releasing new Gem"
