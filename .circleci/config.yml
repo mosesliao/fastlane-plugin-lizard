@@ -44,7 +44,10 @@ jobs:
 
   deploy:
     docker:
-       - image: mosesliao/ruby-lizard:latest
+      - image: circleci/ruby:latest
+      - add_ssh_keys:
+        fingerprints:
+          - "31:9d:76:9d:10:da:ed:a5:04:39:cf:70:72:81:9d:69"
 
     working_directory: ~/repo
 
