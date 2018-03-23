@@ -44,7 +44,7 @@ jobs:
 
   deploy:
     docker:
-       - image: mosesliao/ruby-lizard:latest
+       - image: circleci/ruby:latest
 
     working_directory: ~/repo
 
