@@ -9,6 +9,19 @@ describe Fastlane::Actions::LizardAction do
     let(:length) { 800 }
     let(:working_threads) { 3 }
 
+    context "executable" do
+      it "fails with invalid sourcemap path" do
+        sourcemap_path = File.absolute_path '../no/such/lizard.py'
+        expect do
+          Fastlane::FastFile.new.parse("lane :test do
+            lizard(
+              executable: '#{sourcemap_path}'
+            )
+          end").runner.execute(:test)
+        end.to raise_error("The custom executable at '#{sourcemap_path}' does not exist.")
+      end
+    end
+
     context "default use case" do
       it "default language as swift" do
         result = Fastlane::FastFile.new.parse("lane :test do
@@ -50,6 +63,18 @@ describe Fastlane::Actions::LizardAction do
         end").runner.execute(:test)
 
         expect(result).to eq("lizard -l swift --xml")
+      end
+    end
+
+    context "when specify export_type as HTML" do
+      it "prints out HTML as stdout" do
+        result = Fastlane::FastFile.new.parse("lane :test do
+          lizard(
+            export_type: 'html'
+          )
+        end").runner.execute(:test)
+
+        expect(result).to eq("lizard -l swift --html")
       end
     end
 
