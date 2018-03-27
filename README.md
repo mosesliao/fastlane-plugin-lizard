@@ -29,13 +29,36 @@ For more information check out the [Github repository](https://github.com/terryy
 
 Lizard has only one action so far
 
-```
+```ruby
 lizard(
   source_folder: "foo",
   language: "swift",
   export_type: "csv",
   report_file: "bar.csv"
 )
+```
+
+For multiple languages
+
+```ruby
+lizard(
+  source_folder: "foo",
+  language: "swift,objectivec",
+  export_type: "csv",
+  report_file: "bar.csv"
+)
+```
+
+## Sonar Swift Usage
+
+```ruby
+lane :metrics do
+    scan(scheme: "[SCHEME]", code_coverage: true, derived_data_path: "./DerivedData", output_directory: "./reports")
+    slather(cobertura_xml: true, jenkins: true, scheme: "[SCHEME]", build_directory: "./DerivedData", output_directory: "./reports", proj: "./[PROJECT].xcodeproj")
+    lizard(source_folder: "[SOURCE_FOLDER]", export_type: "xml", report_file: "report/lizard-report.xml")
+    swiftlint(output_file: "./reports/swiftlint.txt", ignore_exit_status: true)
+    sonar
+end
 ```
 
 ## Issues and Feedback

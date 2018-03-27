@@ -10,6 +10,12 @@ module Fastlane
           UI.user_error!("The custom executable at '#{params[:executable]}' does not exist.")
         end
 
+        lizard_cli_version = Gem::Version.new(`lizard --version`.scan(/(?:\d+\.?){3}/).first)
+        required_version = Gem::Version.new(Fastlane::Lizard::CLI_VERSION)
+        if lizard_cli_version < required_version
+          UI.user_error!("Your lizard version is outdated, please upgrade to at least version #{Fastlane::Sentry::CLI_VERSION} and start your lane again!")
+        end
+
         command = forming_command(params)
 
         if params[:show_warnings]
@@ -90,7 +96,7 @@ module Fastlane
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :export_type,
                                        env_name: "FL_LIZARD_EXPORT_TYPE",
-                                       description: "The file extension of your export. E.g. xml, csv",
+                                       description: "The file extension of your export. E.g. xml, csv, html",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :ccn,
                                        env_name: "FL_LIZARD_CCN",
