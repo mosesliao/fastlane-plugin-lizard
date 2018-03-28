@@ -13,7 +13,7 @@ module Fastlane
         lizard_cli_version = Gem::Version.new(`lizard --version`.scan(/(?:\d+\.?){3}/).first)
         required_version = Gem::Version.new(Fastlane::Lizard::CLI_VERSION)
         if lizard_cli_version < required_version
-          UI.user_error!("Your lizard version is outdated, please upgrade to at least version #{Fastlane::Sentry::CLI_VERSION} and start your lane again!")
+          UI.user_error!("Your lizard version is outdated, please upgrade to at least version #{Fastlane::Lizard::CLI_VERSION} and start your lane again!")
         end
 
         command = forming_command(params)
