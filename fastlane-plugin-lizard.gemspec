@@ -24,9 +24,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'bundler'
   spec.add_dependency 'fastlane'
   spec.add_dependency 'pry'
-  spec.add_dependency 'rake'
-  spec.add_dependency 'rspec'
-  spec.add_dependency 'rspec_junit_formatter'
-  spec.add_dependency 'rubocop'
-  spec.add_dependency 'simplecov'
 end
