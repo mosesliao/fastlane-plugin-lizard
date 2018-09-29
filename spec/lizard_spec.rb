@@ -9,6 +9,18 @@ describe Fastlane::Actions::LizardAction do
     let(:length) { 800 }
     let(:working_threads) { 3 }
 
+    context "when use correct lizard version" do
+      it "allows proper execution" do
+        
+      end
+    end
+
+    context "when use older lizard version" do
+      it "stops execution" do
+
+      end
+    end
+
     context "executable" do
       it "fails with invalid sourcemap path" do
         sourcemap_path = File.absolute_path '../no/such/lizard.py'
