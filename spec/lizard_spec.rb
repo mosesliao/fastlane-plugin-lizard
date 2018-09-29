@@ -8,6 +8,9 @@ describe Fastlane::Actions::LizardAction do
     let(:ccn) { 10 }
     let(:length) { 800 }
     let(:working_threads) { 3 }
+    let(:custom_executable) { "../spec/fixtures/lizard.py" }
+    let(:outdated_executable) { "../spec/fixtures/outdated_lizard.py" }
+    let(:newer_executable) { "../spec/fixtures/newer_lizard.py" }
 
     context "when use correct lizard version" do
       it "allows proper execution" do
@@ -34,6 +37,37 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
+    context "required version" do
+      it "should not raise if executable version is same as required" do
+        expect(FastlaneCore::UI).to_not(receive(:user_error!))
+        Fastlane::FastFile.new.parse("lane :test do
+          lizard(
+            executable: '#{custom_executable}'
+          )
+        end").runner.execute(:test)
+      end
+
+      it "should not raise if executable version is newer than required" do
+        expect(FastlaneCore::UI).to_not(receive(:user_error!))
+        Fastlane::FastFile.new.parse("lane :test do
+          lizard(
+            executable: '#{newer_executable}'
+          )
+        end").runner.execute(:test)
+      end
+
+      it "should raise if executable version is less than required" do
+        expect(FastlaneCore::UI).to receive(:user_error!).with(/Your lizard version .* is outdated, please upgrade to at least version .* and start your lane again\!/).and_call_original
+        expect do
+          Fastlane::FastFile.new.parse("lane :test do
+            lizard(
+              executable: '#{outdated_executable}'
+            )
+          end").runner.execute(:test)
+        end.to raise_error(/Your lizard version .* is outdated, please upgrade to at least version .* and start your lane again\!/)
+      end
+    end
+
     context "default use case" do
       it "default language as swift" do
         result = Fastlane::FastFile.new.parse("lane :test do
@@ -48,11 +82,11 @@ describe Fastlane::Actions::LizardAction do
       it "uses custom executable" do
         result = Fastlane::FastFile.new.parse("lane :test do
           lizard(
-            executable: '../spec/fixtures/lizard.py'
+            executable: '#{custom_executable}'
           )
         end").runner.execute(:test)
 
-        expect(result).to eq("python ../spec/fixtures/lizard.py -l swift")
+        expect(result).to eq("python #{custom_executable} -l swift")
       end
 
       it "should raise if custom executable does not exist" do
