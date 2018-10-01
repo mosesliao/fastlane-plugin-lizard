@@ -35,6 +35,16 @@ jobs:
           name: run tests
           command: bundle exec rake
 
+      # Run Complexity tests
+      - run:
+          name: run code checks
+          command: ./bin/sonar-scanner \
+  -Dsonar.projectKey=liaogz82_fastlane-plugin-lizard \
+  -Dsonar.organization=liaogz82-github \
+  -Dsonar.sources=. \
+  -Dsonar.host.url=https://sonarcloud.io \
+  -Dsonar.login=c8fa2c9f6c0f1204b6bf221b71c1fac6abc37e93
+
       # collect reports
       - store_test_results:
           path: ~/repo/test-results
