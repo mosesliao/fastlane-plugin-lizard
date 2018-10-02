@@ -4,6 +4,7 @@
 [![Gem Version][3]][4]
 [![CircleCI][5]][6]
 [![codecov][7]][8]
+[![Maintainability][16]][17]
 
 ## Getting Started
 
@@ -93,3 +94,5 @@ iOS and Android apps. To learn more, check out [fastlane.tools][14].
 [13]: https://docs.fastlane.tools/plugins/create-plugin/
 [14]: https://fastlane.tools
 [15]: https://github.com/Backelite/sonar-swift
+[16]: https://api.codeclimate.com/v1/badges/c241884a5177ca46c672/maintainability
+[17]: https://codeclimate.com/github/liaogz82/fastlane-plugin-lizard/maintainability
