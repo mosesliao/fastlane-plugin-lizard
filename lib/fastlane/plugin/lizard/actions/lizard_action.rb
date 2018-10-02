@@ -10,16 +10,18 @@ module Fastlane
           UI.user_error!("The custom executable at '#{params[:executable]}' does not exist.")
         end
 
-        lizard_cli_version = Gem::Version.new(`lizard --version`.scan(/(?:\d+\.?){3}/).first)
+        lizard_command = params[:executable].nil? ? "lizard" : "python #{params[:executable]}"
+
+        lizard_cli_version = Gem::Version.new(`#{lizard_command} --version 2>&1`.strip.scan(/(?:\d+\.?){3}/).first)
         required_version = Gem::Version.new(Fastlane::Lizard::CLI_VERSION)
         if lizard_cli_version < required_version
-          UI.user_error!("Your lizard version is outdated, please upgrade to at least version #{Fastlane::Lizard::CLI_VERSION} and start your lane again!")
+          UI.user_error!("Your lizard version #{lizard_cli_version} is outdated, please upgrade to at least version #{required_version} and start your lane again!")
         end
 
-        command = forming_command(params)
+        command = forming_command(lizard_command, params)
 
         if params[:show_warnings]
-          Fastlane::Actions.sh_control_output("lizard #{params[:source_folder]} | sed -n -e '/^$/,$p'", print_command: true, print_command_output: true)
+          Fastlane::Actions.sh_control_output("#{lizard_command} #{params[:source_folder]} | sed -n -e '/^$/,$p'", print_command: true, print_command_output: true)
         end
 
         begin
@@ -30,10 +32,9 @@ module Fastlane
         end
       end
 
-      def self.forming_command(params)
+      def self.forming_command(lizard_command, params)
         command = []
-        command << 'lizard' unless params[:executable]
-        command << "python #{params[:executable]}" if params[:executable]
+        command << lizard_command
         command << params[:language].split(",").map { |l| "-l #{l.strip}" }.join(" ") if params[:language]
         command << "--#{params[:export_type]}" if params[:export_type]
         command << "-C #{params[:ccn]}" if params[:ccn] # stands for cyclomatic complexity number
