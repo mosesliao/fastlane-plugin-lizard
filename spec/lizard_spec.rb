@@ -12,6 +12,18 @@ describe Fastlane::Actions::LizardAction do
     let(:outdated_executable) { "../spec/fixtures/outdated_lizard.py" }
     let(:newer_executable) { "../spec/fixtures/newer_lizard.py" }
 
+    context "when use correct lizard version" do
+      it "allows proper execution" do
+        
+      end
+    end
+
+    context "when use older lizard version" do
+      it "stops execution" do
+
+      end
+    end
+
     context "executable" do
       it "fails with invalid sourcemap path" do
         sourcemap_path = File.absolute_path '../no/such/lizard.py'
