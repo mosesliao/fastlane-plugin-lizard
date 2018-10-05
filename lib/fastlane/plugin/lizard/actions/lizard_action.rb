@@ -20,10 +20,6 @@ module Fastlane
 
         command = forming_command(lizard_command, params)
 
-        if params[:show_warnings]
-          Fastlane::Actions.sh_control_output("#{lizard_command} #{params[:source_folder]} | sed -n -e '/^$/,$p'", print_command: true, print_command_output: true)
-        end
-
         begin
           Actions.sh(command.join(" "), log: false)
         rescue StandardError => e
@@ -149,11 +145,6 @@ module Fastlane
                                       default_value: false,
                                       is_string: false,
                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :show_warnings,
-                                      env_name: "FL_LIZARD_SHOW_WARNINGS",
-                                      description: "Show lizard warnings on console, on code that is too complex",
-                                      is_string: false,
-                                      default_value: false),
           FastlaneCore::ConfigItem.new(key: :executable,
                                       description: "Path to the `lizard.py` executable on your machine",
                                       is_string: true,
