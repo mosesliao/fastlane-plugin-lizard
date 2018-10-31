@@ -11,6 +11,7 @@ describe Fastlane::Actions::LizardAction do
     let(:custom_executable) { "../spec/fixtures/lizard.py" }
     let(:outdated_executable) { "../spec/fixtures/outdated_lizard.py" }
     let(:newer_executable) { "../spec/fixtures/newer_lizard.py" }
+    let(:wrong_executable) { "../spec/fixtures" }
 
     context "executable" do
       it "fails with invalid sourcemap path" do
@@ -42,6 +43,17 @@ describe Fastlane::Actions::LizardAction do
             executable: '#{newer_executable}'
           )
         end").runner.execute(:test)
+      end
+
+      it "should raise if executable is wrong" do
+        expect(FastlaneCore::UI).to receive(:user_error!).with(/You need to point to the executable to lizard.py file\!/).and_call_original
+        expect do
+          Fastlane::FastFile.new.parse("lane :test do
+            lizard(
+              executable: '#{wrong_executable}'
+            )
+          end").runner.execute(:test)
+        end.to raise_error(/You need to point to the executable to lizard.py file\!/)
       end
 
       it "should raise if executable version is less than required" do
