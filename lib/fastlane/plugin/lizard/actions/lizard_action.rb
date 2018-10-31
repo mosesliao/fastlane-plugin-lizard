@@ -6,8 +6,12 @@ module Fastlane
           UI.user_error!("You have to install lizard using `[sudo] pip install lizard` or specify the executable path with the `:executable` option.")
         end
 
-        if params[:executable] && !File.exist?(params[:executable])
-          UI.user_error!("The custom executable at '#{params[:executable]}' does not exist.")
+        if params[:executable]
+          if !File.exist?(params[:executable])
+            UI.user_error!("The custom executable at '#{params[:executable]}' does not exist.")
+          elsif !File.file?(params[:executable])
+            UI.user_error!("You need to point to the executable to lizard.py file!")
+          end
         end
 
         lizard_command = params[:executable].nil? ? "lizard" : "python #{params[:executable]}"
