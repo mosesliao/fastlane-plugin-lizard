@@ -14,7 +14,16 @@ describe Fastlane::Actions::LizardAction do
     let(:wrong_executable) { "../spec/fixtures" }
 
     context "executable" do
-      it "fails with invalid sourcemap path" do
+      it 'fails if lizard is not installed', type: :no_lizard do
+        expect do
+          Fastlane::FastFile.new.parse("lane :test do
+            lizard(
+            )
+          end").runner.execute(:test)
+        end.to raise_error("You have to install lizard using `[sudo] pip install lizard` or specify the executable path with the `:executable` option.")
+      end
+
+      it "fails with invalid sourcemap path", type: :lizard do
         sourcemap_path = File.absolute_path '../no/such/lizard.py'
         expect do
           Fastlane::FastFile.new.parse("lane :test do
@@ -26,7 +35,7 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "required version" do
+    context "required version", type: :lizard do
       it "should not raise if executable version is same as required" do
         expect(FastlaneCore::UI).to_not(receive(:user_error!))
         Fastlane::FastFile.new.parse("lane :test do
@@ -68,7 +77,7 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "default use case" do
+    context "default use case", type: :lizard do
       it "default language as swift" do
         result = Fastlane::FastFile.new.parse("lane :test do
           lizard
@@ -78,7 +87,7 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "when specify custom executable" do
+    context "when specify custom executable", type: :lizard do
       it "uses custom executable" do
         result = Fastlane::FastFile.new.parse("lane :test do
           lizard(
@@ -100,7 +109,7 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "when specify export_type as XML" do
+    context "when specify export_type as XML", type: :lizard do
       it "prints out XML as stdout" do
         result = Fastlane::FastFile.new.parse("lane :test do
           lizard(
@@ -112,7 +121,7 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "when specify export_type as HTML" do
+    context "when specify export_type as HTML", type: :lizard do
       it "prints out HTML as stdout" do
         result = Fastlane::FastFile.new.parse("lane :test do
           lizard(
@@ -124,7 +133,7 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "when specify export_type as CSV" do
+    context "when specify export_type as CSV", type: :lizard do
       it "prints out CSV as stdout" do
         result = Fastlane::FastFile.new.parse("lane :test do
           lizard(
@@ -136,7 +145,7 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "when specify folder to scan" do
+    context "when specify folder to scan", type: :lizard do
       it "states the source folder" do
         result = Fastlane::FastFile.new.parse("lane :test do
           lizard(
@@ -148,7 +157,7 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "when specify language to scan" do
+    context "when specify language to scan", type: :lizard do
       it "overrides swift default language" do
         result = Fastlane::FastFile.new.parse("lane :test do
           lizard(
@@ -160,7 +169,7 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "when specify multiple languages to scan" do
+    context "when specify multiple languages to scan", type: :lizard do
       it "states all specified languages" do
         result = Fastlane::FastFile.new.parse("lane :test do
           lizard(
@@ -172,7 +181,7 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "when specify code complexity number" do
+    context "when specify code complexity number", type: :lizard do
       it "overrides default 15" do
         result = Fastlane::FastFile.new.parse("lane :test do
           lizard(
@@ -184,7 +193,7 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "when specify maximum function length warning" do
+    context "when specify maximum function length warning", type: :lizard do
       it "overrides default 1000" do
         result = Fastlane::FastFile.new.parse("lane :test do
           lizard(
@@ -196,7 +205,7 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "when specify number of working threads" do
+    context "when specify number of working threads", type: :lizard do
       it "overrides default single thread" do
         result = Fastlane::FastFile.new.parse("lane :test do
           lizard(
@@ -208,7 +217,7 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "the `ignore_exit_status` option" do
+    context "the `ignore_exit_status` option", type: :lizard do
       context "by default" do
         it 'should raise if lizard completes with a non-zero exit status' do
           allow(FastlaneCore::UI).to receive(:important)
@@ -256,7 +265,7 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "when specify report_file options" do
+    context "when specify report_file options", type: :lizard do
       it "adds redirect file to command" do
         result = Fastlane::FastFile.new.parse("lane :test do
           lizard(
