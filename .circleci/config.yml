@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-       - image: mosesliao/ruby-lizard:latest
+      - image: circleci/ruby
 
     working_directory: ~/repo
 
@@ -30,10 +30,20 @@ jobs:
             - ./vendor
           key: v1-dependencies-{{ checksum "Gemfile" }}
 
-      # run tests!
+      # run no lizard tests
+      - run:
+          name: run no lizard tests
+          command: bundle exec rspec --tag type:no_lizard
+
+      # Install Lizard
       - run:
           name: run tests
-          command: bundle exec rake
+          command: sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get install -y python3-pip && sudo pip3 install lizard --upgrade
+
+      # run lizard tests
+      - run:
+          name: run lizard tests
+          command: bundle exec rspec --tag type:lizard
 
       # collect reports
       - store_test_results:
