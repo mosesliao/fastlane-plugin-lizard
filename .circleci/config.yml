@@ -38,7 +38,7 @@ jobs:
       # Install Lizard
       - run:
           name: run tests
-          command: apt-get -y update && apt-get -y upgrade && apt-get install -y python3-pip && pip3 install lizard --upgrade
+          command: sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get install -y python3-pip && sudo pip3 install lizard --upgrade
 
       # run lizard tests
       - run:
