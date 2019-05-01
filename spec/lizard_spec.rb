@@ -7,6 +7,9 @@ describe Fastlane::Actions::LizardAction do
     let(:expected_multiple_language_options) { "-l java -l swift -l objectivec" }
     let(:ccn) { 10 }
     let(:length) { 800 }
+    let(:exclude) { "spec_helper.rb" }
+    let(:multiple_exclude) { "spec_helper.rb, fixtures/*" }
+    let(:expected_multiple_exclude) { "-x spec_helper.rb -x fixtures/*" }
     let(:working_threads) { 3 }
     let(:custom_executable) { "../spec/fixtures/lizard.py" }
     let(:outdated_executable) { "../spec/fixtures/outdated_lizard.py" }
@@ -205,7 +208,31 @@ describe Fastlane::Actions::LizardAction do
       end
     end
 
-    context "when specify number of working threads", type: :lizard do
+    context "when specify to exclude one file or folder" do
+      it "exclude the file or folder" do
+        result = Fastlane::FastFile.new.parse("lane :test do
+          lizard(
+            exclude: '#{exclude}'
+          )
+        end").runner.execute(:test)
+
+        expect(result).to eq("lizard -l swift -x #{exclude}")
+      end
+    end
+
+    context "when specify to exclude multiple files or folders" do
+      it "overrides default single thread" do
+        result = Fastlane::FastFile.new.parse("lane :test do
+          lizard(
+            exclude: '#{multiple_exclude}'
+          )
+        end").runner.execute(:test)
+
+        expect(result).to eq("lizard -l swift #{expected_multiple_exclude}")
+      end
+    end
+
+    context "when specify number of working threads" do
       it "overrides default single thread" do
         result = Fastlane::FastFile.new.parse("lane :test do
           lizard(
