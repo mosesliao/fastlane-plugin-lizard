@@ -41,7 +41,7 @@ module Fastlane
         command << "-L #{params[:length]}" if params[:length]
         command << "-a #{params[:arguments]}" if params[:arguments]
         command << "-i #{params[:number]}" if params[:number]
-        command << "-x #{params[:exclude]}" if params[:exclude]
+        command << params[:exclude].split(",").map { |x| "-x #{x.strip}" }.join(" ").to_s if params[:exclude]
         command << "-t #{params[:working_threads]}" if params[:working_threads]
         command << "-E #{params[:extensions]}" if params[:extensions]
         command << "-s #{params[:sorting]}" if params[:sorting]
@@ -121,6 +121,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :exclude,
                                       env_name: "FL_LIZARD_EXCLUDE",
                                       description: "Exclude files that match this pattern. * matches everything, ? matches any single character, \"./folder/*\" exclude everything in the folder recursively. Multiple patterns can be specified. Don't forget to add \"\" around the pattern",
+                                      is_string: true,
                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :working_threads,
                                        env_name: "FL_LIZARD_WORKING_THREADS",
