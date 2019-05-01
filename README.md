@@ -45,6 +45,12 @@ lizard(
 language: 'swift,objectivec'
 ```
 
+#### Multiple excludes
+
+```ruby
+exclude: 'spec_helper.rb,fixtures/*'
+```
+
 #### XML reports
 
 ```ruby
