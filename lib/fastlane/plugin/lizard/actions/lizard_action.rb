@@ -41,7 +41,7 @@ module Fastlane
         command << "-L #{params[:length]}" if params[:length]
         command << "-a #{params[:arguments]}" if params[:arguments]
         command << "-i #{params[:number]}" if params[:number]
-        command << params[:exclude].split(",").map { |x| "-x #{x.strip}" }.join(" ").to_s if params[:exclude]
+        command << params[:exclude].split(",").map { |x| "-x \"#{x.strip}\"" }.join(" ").to_s if params[:exclude]
         command << "-t #{params[:working_threads]}" if params[:working_threads]
         command << "-E #{params[:extensions]}" if params[:extensions]
         command << "-s #{params[:sorting]}" if params[:sorting]
