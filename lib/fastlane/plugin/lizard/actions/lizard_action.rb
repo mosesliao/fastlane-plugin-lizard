@@ -146,11 +146,13 @@ module Fastlane
                                        description: "The folder/file which lizard output to",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :ignore_exit_status,
+                                       env_name: "FL_LIZARD_IGNORE_EXIT_STATUS",
                                        description: "Ignore the exit status of the lizard command, so that serious violations don't fail the build (true/false)",
                                        default_value: false,
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :executable,
+                                       env_name: "FL_LIZARD_EXECUTABLE",
                                        description: "Path to the `lizard.py` executable on your machine",
                                        is_string: true,
                                        optional: true)
