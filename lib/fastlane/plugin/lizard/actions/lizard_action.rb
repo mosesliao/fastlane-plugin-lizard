@@ -22,11 +22,11 @@ module Fastlane
           UI.user_error!("Your lizard version #{lizard_cli_version} is outdated, please upgrade to at least version #{required_version} and start your lane again!")
         end
 
-        command = forming_command(lizard_command, params)
+        command = forming_command(lizard_command, params).join(" ")
         UI.message command
-        
+
         begin
-          Actions.sh(command.join(" "), log: false)
+          Actions.sh(command, log: false)
         rescue StandardError => e
           puts e
           handle_lizard_error(params[:ignore_exit_status], $CHILD_STATUS.exitstatus)
