@@ -23,7 +23,8 @@ module Fastlane
         end
 
         command = forming_command(lizard_command, params)
-
+        UI.message command
+        
         begin
           Actions.sh(command.join(" "), log: false)
         rescue StandardError => e
