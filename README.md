@@ -66,6 +66,8 @@ expects an xml report located at `sonar-reports/lizard-report.xml`:
 lizard(source_folder: 'foo', export_type: 'xml', report_file: 'sonar-reports/lizard-report.xml')
 ```
 
+The plugin doesn't create the directories specified in the `report_file` path, so they must exist or an error will occur.
+
 ## Issues and Feedback
 
 For any other issues and feedback about this plugin, please submit it to this repository.
